@@ -10,9 +10,12 @@ import tensorflow as tf
 import keras as k
 import nibabel as nib
 
+import glob
+import os
+# import tqdm
 
 
-COLAB = False
+COLAB = False   # Select between colaboratory or local execution
 
 if COLAB:
   from google.colab import drive
@@ -22,29 +25,53 @@ if COLAB:
 else: 
   DATA_PATH = '../../data'
 
-# Prueba de cómo cargar una imagen con Nibabel
 
-filename_gray_matter = DATA_PATH + '/Datos_TFG_Angel/ppNOR/MRI/m0wrp2ADNI_941_S_1203_MR_MPR__GradWarp__B1_Correction__N3__Scaled_Br_20070801201705724_S25671_I63879.nii'
-filename_white_matter = DATA_PATH + '/Datos_TFG_Angel/ppNOR/MRI/m0wrp1ADNI_941_S_1203_MR_MPR__GradWarp__B1_Correction__N3__Scaled_Br_20070801201705724_S25671_I63879.nii'
+def load_image(filename):    
+    """
+    
+    Parameters
+    ----------
+    filename : str
+        relative path to de image
 
-gray_matter = nib.load(filename_gray_matter)
-white_matter = nib.load(filename_white_matter)
+    Returns
+    -------
+    img : numpy ndarray
+        array containing the image
+        
+    """
+    img = nib.load(filename)
+    img = np.asarray(img.dataobj)
+    return img
+    
 
-gray_image_data = np.array(gray_matter.get_fdata())
-white_image_data = np.array(white_matter.get_fdata())
+def load_images_from_dir(dirname):
+    """
+    
+    Parameters
+    ----------
+    dirname : str
+        name of the directory containing images.
 
-print(np.sum(np.isnan(gray_image_data)))
-print(np.sum(np.isnan(white_image_data)))
+    Returns
+    -------
+    imgs : numpy ndarray
+        array containing all of the images in the folder.
 
-# Todo el borde de la imagen tiene valor NaN
-shape = gray_image_data.shape
-print(121*145*2 + 119*145*2 + 119*119*2)
+    """
+    imgs = []
+    
+    for filename in glob.iglob(dirname + '/*.nii'):
+        imgs.append(load_image(filename))
+        
+    imgs = np.stack(imgs)
+    return imgs
 
 
-# print(shape[0]*shape[1] + shape[0]*)
+# Probamos a cargar un directorio
+dirname = 'ppNOR/MRI/whiteMatter'
+imgs = load_images_from_dir(DATA_PATH + '/' + dirname)
 
-print(np.mean(gray_image_data[~np.isnan(gray_image_data)]))
-print(np.mean(white_image_data[~np.isnan(white_image_data)]))
 
 # with open('/content/drive/My Drive/Machine learning/foo.txt', 'w') as f:
 #   f.write('Hello Google Drive!')
