@@ -10,9 +10,9 @@ import tensorflow as tf
 import keras as k
 import nibabel as nib
 
+import time
 import glob
-import os
-# import tqdm
+from tqdm import tqdm
 
 
 COLAB = False   # Select between colaboratory or local execution
@@ -61,18 +61,49 @@ def load_images_from_dir(dirname):
     """
     imgs = []
     
-    for filename in glob.iglob(dirname + '/*.nii'):
+    for filename in tqdm(glob.glob(dirname + '/*.nii')):
         imgs.append(load_image(filename))
         
     imgs = np.stack(imgs)
     return imgs
 
 
-# Probamos a cargar un directorio
-dirname = 'ppNOR/MRI/whiteMatter'
-imgs = load_images_from_dir(DATA_PATH + '/' + dirname)
+def load_data(dirs_dict):
+    """
+    
+    Parameters
+    ----------
+    dirs_dict : dictionary
+        dictionary containing data folders name, and the label for the images
+        on each forlder.
+
+    Returns
+    -------
+    x : numpy ndarray
+        array containing the images.
+    y : numpy ndarray
+        array containig the label of each image.
+
+    """
+    first = True
+    for key, value in dirs_dict.items():
+        if first:
+            x = load_images_from_dir(value)
+            y = np.full((x.shape[0]), key, dtype=np.uint8)
+            first = False
+        else:
+            x_current = load_images_from_dir(value)
+            x = np.concatenate((x, x_current))
+            y = np.concatenate((y, np.full((x_current.shape[0]), key, dtype=np.uint8)))
+            
+    y = k.utils.to_categorical(y)
+    
+    return x, y
 
 
-# with open('/content/drive/My Drive/Machine learning/foo.txt', 'w') as f:
-#   f.write('Hello Google Drive!')
-# !cat /content/drive/My\ Drive/Machine\ learning/foo.txt
+# Load PET images with labels
+print('\n --- Loading PET data --- \n')
+time.sleep(0.5)
+x, y = load_data({0: DATA_PATH + "/ppNOR/PET", 
+                  1: DATA_PATH + "/ppAD/PET",
+                  2: DATA_PATH + "/ppMCI/PET"})
