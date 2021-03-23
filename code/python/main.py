@@ -9,6 +9,7 @@ import numpy as np
 import tensorflow as tf
 import keras as k
 import nibabel as nib
+from sklearn.model_selection import train_test_split
 
 import time
 import glob
@@ -104,6 +105,11 @@ def load_data(dirs_dict):
 # Load PET images with labels
 print('\n --- Loading PET data --- \n')
 time.sleep(0.5)
-x, y = load_data({0: DATA_PATH + "/ppNOR/PET", 
+X, y = load_data({0: DATA_PATH + "/ppNOR/PET", 
                   1: DATA_PATH + "/ppAD/PET",
                   2: DATA_PATH + "/ppMCI/PET"})
+
+
+# Separate into training and test sets (stratified)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size = 0.2, stratify = y, random_state = 1)
