@@ -7,7 +7,7 @@ Created on Tue Jun  8 14:49:02 2021
 
 import tensorflow as tf
 
-AUTO = None
+AUTO = tf.data.experimental.AUTOTUNE
 REPLICAS = None
 STRATEGY = None
 
@@ -29,20 +29,5 @@ def initialize_device(device):
     elif device == "GPU":
         STRATEGY = tf.distribute.MirroredStrategy()
         
-    AUTO     = tf.data.experimental.AUTOTUNE
     REPLICAS = STRATEGY.num_replicas_in_sync
     print(f'Number of accelerators: {REPLICAS}')
-    
-    
-def get_gcs_path(dataset):
-    from kaggle_datasets import KaggleDatasets
-    from kaggle_secrets import UserSecretsClient
-    
-    user_secrets = UserSecretsClient()
-    user_credential = user_secrets.get_gcloud_credential()
-    
-    user_secrets.set_tensorflow_credential(user_credential)
-    
-    gcs_ds_path = KaggleDatasets().get_gcs_path(dataset)
-    
-    return gcs_ds_path
