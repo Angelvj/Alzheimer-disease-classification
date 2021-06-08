@@ -8,7 +8,7 @@ Created on Tue Jun  8 17:46:03 2021
 import numpy as np
 import tensorflow as tf
 import nibabel as nib
-import config as cfg
+import ad_repo.code.config as cfg
 
 def load_image(path):    
     """
