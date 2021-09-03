@@ -12,10 +12,6 @@ from math import ceil
 from tensorflow.keras.layers import MaxPooling3D, Dense, Conv3D, BatchNormalization, Input, GlobalAveragePooling3D, add, Activation
 from tensorflow.keras.regularizers import l2
 
-pet_shape = (79, 95, 68, 1)
-mri_shape = (121, 145, 121, 1)
-mri_shape_downsample = (75, 90, 75, 1)
-
 # This code is an adaptation of https://github.com/raghakot/keras-resnet/blob/master/resnet.py 
 # to 3D
 def _bn_relu(input):
