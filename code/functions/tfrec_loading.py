@@ -37,7 +37,27 @@ def load_dataset(filenames, img_shape, num_classes, autotune, no_order=True):
     return dataset
 
 
+def get_dataset(filenames, img_shape, num_classes, autotune, batch_size = 4, 
+                train=False, augment=None, cache=False, no_order=True):
+
+    dataset =  load_dataset(filenames, img_shape, num_classes, autotune, no_order)
+    if cache:
+        dataset = dataset.cache() # Do it only if dataset fits in ram
+    if train:
+        dataset = dataset.repeat()
+        if augment is not None:
+            dataset = dataset.map(lambda img, label: (augment(img), label), num_parallel_calls=autotune)
+
+        dataset = dataset.shuffle(count_data_items(filenames))
+
+    dataset = dataset.batch(batch_size)
+    dataset = dataset.prefetch(autotune)
+    return dataset
+
+
 def count_data_items(filenames):
     n = [int(re.compile(r"-([0-9]*)\.").search(filename).group(1)) 
             for filename in filenames]
     return np.sum(n)
+
+
