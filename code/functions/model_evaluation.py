@@ -197,8 +197,6 @@ def present_results(results_dict, class_names):
 def get_predictions(model, X, img_shape, num_classes, autotune, batch_size):
     
     predict_proba = model.predict(get_dataset(X, img_shape, num_classes, autotune, batch_size, no_order=False))
-    
-    predict_proba = model.predict(get_dataset(X, no_order=False))
     y_pred = np.argmax(predict_proba, axis=1)
     return y_pred
 
