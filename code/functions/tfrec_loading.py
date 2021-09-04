@@ -19,7 +19,7 @@ def read_tfrecord(example, img_shape, num_classes):
     example = tf.io.parse_single_example(example, tfrec_format)
     one_hot_label = tf.sparse.to_dense(example['one_hot_label'])
     one_hot_label = tf.reshape(one_hot_label, [num_classes])
-    image = tf.reshape(tf.sparse.to_dense(example['image'], img_shape))
+    image = tf.reshape(tf.sparse.to_dense(example['image']), img_shape)
     
     return image, one_hot_label
 
