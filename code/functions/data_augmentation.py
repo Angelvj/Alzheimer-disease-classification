@@ -6,33 +6,13 @@ Created on Fri Sep  3 12:31:56 2021
 """
 
 import skimage.transform as transform
-import tensorflow as tf
 import scipy
 import numpy as np
-
-
-def augment_image(img):
-    img = img.squeeze()
-    original_shape = img.shape
-    img = random_rotations(img, -5, 5)
-    img = random_zoom(img, min=0.9, max=1.1)
-    img = random_shift(img, max=0.2)
-    # img = random_flip(img)
-    img = downscale(img, original_shape)
-    img = np.expand_dims(img, axis=3) # Restore channel axis
-    return img
 
 
 def downscale(image, shape):
     'For upscale, anti_aliasing should be false'
     return transform.resize(image, shape, mode='constant', anti_aliasing=True)
-
-
-@tf.function(input_signature=[tf.TensorSpec(None, tf.float32)])
-def tf_augment_image(input):
-    """ Tensorflow can't manage numpy functions, we have to wrap our augmentation function """
-    img = tf.numpy_function(augment_image, [input], tf.float32)
-    return img
 
 
 def random_rotations(img, min_angle, max_angle):
