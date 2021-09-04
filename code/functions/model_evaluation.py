@@ -119,3 +119,20 @@ def kfold(model_builder, filenames, labels, img_shape, strategy, tpu, autotune, 
     print('-'*80)
 
     return folds_histories
+
+
+
+def repeated_kfold(model_builder, filenames, labels, img_shape, strategy, tpu, autotune, n_folds, batch_size, epochs, reps=5, 
+                   stratify=True, shuffle=True, random_state=None, cbks=None):
+    
+    reps_histories = []
+    
+    for i in range(reps):
+        print(f'Repetition {i + 1}')
+        folds_histories = kfold(model_builder, filenames, labels, img_shape, strategy, tpu, autotune, n_folds,
+                                             batch_size, epochs, stratify=stratify,
+                                             shuffle=shuffle, random_state=random_state, cbks=cbks)
+
+        reps_histories.append(folds_histories)
+
+    return reps_histories
