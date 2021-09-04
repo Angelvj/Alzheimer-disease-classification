@@ -12,6 +12,12 @@ from sklearn.model_selection import KFold, StratifiedKFold
 from functions.tfrec_loading import get_dataset, count_data_items
 
 
+def get_rkf_history(detailed_history):
+    reps_avgd_per_kfold = [avg_results_per_epoch(history) for history in detailed_history]
+    rkf_history = avg_results_per_epoch(reps_avgd_per_kfold)
+    return rkf_history
+
+
 def avg_results_per_epoch(histories):
     
     keys = list(histories[0].keys())
@@ -119,7 +125,6 @@ def kfold(model_builder, filenames, labels, img_shape, strategy, tpu, autotune, 
     print('-'*80)
 
     return folds_histories
-
 
 
 def repeated_kfold(model_builder, filenames, labels, img_shape, strategy, tpu, autotune, n_folds, batch_size, epochs, reps=5, 
