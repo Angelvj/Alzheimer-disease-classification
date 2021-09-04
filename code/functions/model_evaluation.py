@@ -12,12 +12,6 @@ from sklearn.model_selection import KFold, StratifiedKFold
 from functions.tfrec_loading import get_dataset, count_data_items
 
 
-def get_rkf_history(detailed_history):
-    reps_avgd_per_kfold = [avg_results_per_epoch(history) for history in detailed_history]
-    rkf_history = avg_results_per_epoch(reps_avgd_per_kfold)
-    return rkf_history
-
-
 def avg_results_per_epoch(histories):
     
     keys = list(histories[0].keys())
@@ -28,6 +22,12 @@ def avg_results_per_epoch(histories):
         avg_histories[key] = [np.mean([x[key][i] for x in histories]) for i in range(epochs)]
         
     return avg_histories
+
+
+def get_rkf_history(detailed_history):
+    reps_avgd_per_kfold = [avg_results_per_epoch(history) for history in detailed_history]
+    rkf_history = avg_results_per_epoch(reps_avgd_per_kfold)
+    return rkf_history
 
 
 def plot_epochs_history(num_epochs, history):
