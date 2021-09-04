@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold, StratifiedKFold
 from functions.tfrec_loading import get_dataset, count_data_items
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 
 def avg_results_per_epoch(histories):
@@ -125,6 +126,82 @@ def kfold(model_builder, filenames, labels, img_shape, strategy, tpu, autotune, 
     print('-'*80)
 
     return folds_histories
+
+
+def train_model(model_builder, filenames, img_shape, strategy, autotune, batch_size,
+                epochs, cbks=None):
+    
+    with strategy.scope():
+        OPT = tf.keras.optimizers.Adam()
+        LOSS = tf.keras.losses.CategoricalCrossentropy(label_smoothing=0.00)
+        model = model_builder(img_shape)
+        model.compile(optimizer=OPT, loss=LOSS, metrics=['accuracy'])
+        
+    _ = model.fit(
+        get_dataset(filenames, img_shape, autotune, batch_size, train=True, augment=None, cache=True),
+        epochs = epochs, callbacks = cbks,
+        steps_per_epoch = int(np.rint(count_data_items(filenames)/batch_size)))
+
+    return model
+
+
+def calculate_results(y_true, y_pred, labels = [0, 1, 2]):
+
+    results = dict()
+    results['sensitivity'] = dict()
+    results['specificity'] = dict()
+
+    cm = confusion_matrix(y_true, y_pred, labels)
+
+    for i in range(len(cm)):
+
+        true_positives = cm[i, i]
+        false_positives_idx = [j for j in range(len(cm)) if j != i]
+        false_positives = np.sum(cm[false_positives_idx, i])
+
+        true_negatives = 0
+        for j in range(len(cm)):
+            for k in range(len(cm)):
+                if j != i and k != i:
+                    true_negatives += cm[j,k]
+
+        false_negatives_idx = [j for j in range(len(cm)) if j != i]
+        false_negatives = np.sum(cm[i, false_negatives_idx])
+
+        sensitivity = true_positives/(true_positives + false_negatives)
+        specificity = true_negatives/(true_negatives + false_positives)
+
+        results['sensitivity'][labels[i]] = sensitivity
+        results['specificity'][labels[i]] = specificity
+
+    results['cm'] = cm
+    results['accuracy'] = (true_positives + true_negatives)/np.sum(cm)
+
+    return results
+
+
+def present_results(results_dict, class_names):
+
+    print('Accuracy:', results_dict['accuracy'], '\n')
+    for c in class_names:
+        print(f'---------- Results for class {class_names[c]} ----------')
+        print(f" - Sensitivity: {results_dict['sensitivity'][c]}")
+        print(f" - Specificity: {results_dict['specificity'][c]}\n")
+
+    print(" --------- Confusion matrix --------- \n")
+
+    disp = ConfusionMatrixDisplay(results_dict['cm'], ['NOR', 'AD', 'MCI'])
+    disp.plot(cmap=plt.cm.Blues)
+
+
+def get_predictions(model, X, img_shape, num_classes, autotune, batch_size):
+    
+    predict_proba = model.predict(get_dataset(X, img_shape, num_classes, autotune, batch_size, no_order=False))
+    
+    predict_proba = model.predict(get_dataset(X, no_order=False))
+    y_pred = np.argmax(predict_proba, axis=1)
+    return y_pred
+
 
 
 def repeated_kfold(model_builder, filenames, labels, img_shape, strategy, tpu, autotune, n_folds, batch_size, epochs, reps=5, 
