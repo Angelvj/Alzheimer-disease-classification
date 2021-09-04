@@ -47,7 +47,7 @@ def plot_epochs_history(num_epochs, history):
     plt.show()  
     
 
-def kfold(model_builder, filenames, labels, strategy, tpu, autotune, img_shape, n_folds, batch_size, epochs, stratify=True,
+def kfold(model_builder, filenames, labels, img_shape, strategy, tpu, autotune, n_folds, batch_size, epochs, stratify=True,
           shuffle=True, random_state=None, cbks=None):
     
     # np_rs = np.random.RandomState(np.random.MT19937(np.random.SeedSequence(random_state)))
