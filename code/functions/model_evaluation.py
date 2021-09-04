@@ -94,7 +94,7 @@ def kfold(model_builder, filenames, labels, img_shape, strategy, tpu, autotune, 
                 validation_steps= max(1, int(np.rint(count_data_items(X_val)/batch_size))))
         
             if tf.__version__ == "2.4.1": # TODO: delete when tensorflow fixes the bug
-                scores = model.evaluate(get_dataset(X_train, img_shape, autotune, batch_size = batch_size, train=False, augment=None, cache=True), 
+                scores = model.evaluate(get_dataset(X_train, img_shape, 3, autotune, batch_size = batch_size, train=False, augment=None, cache=True), 
                                         batch_size = batch_size, steps = max(1, int(np.rint(count_data_items(X_train)/batch_size))))
                 for i in range(len(model.metrics_names)):
                     history.history[model.metrics_names[i]][-1] = scores[i]
