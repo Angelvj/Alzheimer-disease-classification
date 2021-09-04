@@ -25,7 +25,7 @@ def model_0(input_shape):
     return model
 
 
-def model_1_pet(input_shape):
+def model_1(input_shape):
     inputs = tf.keras.layers.Input(input_shape)
     
     x = Conv3D(filters=32, kernel_size=5, activation="relu")(inputs)
@@ -42,7 +42,7 @@ def model_1_pet(input_shape):
     return model
 
 
-def model_2_pet(input_shape):
+def model_2(input_shape):
     
     inputs = tf.keras.layers.Input(input_shape)
 
