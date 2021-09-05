@@ -27,7 +27,7 @@ Dentro del directorio *code* tenemos:
 Los conjuntos de datos de imágenes deben encontrarse en el almacenamiento de Google Drive, en la ruta '/content/drive/MyDrive/data/'. No podemos compartir estos conjuntos debido a la privacidad de los mismos, pero para ejecutar los experimentos, deberíamos contar con los conjuntos de datos que se especifican mediante la siguiente estructura de directorios:
 
 - /content/drive/MyDrive/data/
-  - ad-preprocessed/ --> imágenes preprocesadas según se explica en la memoria
+  - ad-preprocessed/ --> imágenes preprocesadas según se explica en la memoria, para poder descargarlas, es necesario pedir autorización: http://adni.loni.usc.edu/data-samples/access-data/
     - NOR/ --> Pacientes cognitivamente normales
       - PET/
       - MRI/
