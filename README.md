@@ -4,7 +4,7 @@ Trabajo de fin de grado "Aplicación de redes neuronales convolucionales profund
 
 ## Directorios
 
-La estructura de directorios es la siguiente:
+Los directorios que encontramos son los siguientes:
 - code: código realizado para llevar a cabo todos los experimentos
 - memoria: dentro se encuentra el pdf con la memoria del trabajo
 - repeated_kfold_results: resultados importantes obtenidos en los experimentos, mediante repeated k-fold
@@ -18,4 +18,25 @@ Dentro del directorio *code* tenemos:
 - generate_tfrecords: libreta para convertir los conjuntos de datos de imágenes en archivos de tipo tfrecord
 - pretrain_resnet: libreta para preentrenar una red ResNet18 con datos de COVID19
 
-## Cómo ejecutar
+## Cómo ejecutar los experimentos
+
+**Nota**: el código implementado está diseñado para funcionar tanto en Google Colab como en Kaggle.
+
+### Paso 1: Transformar las imágenes en archivos TFRecord
+
+En primer lugar, los conjuntos de datos de imágenes deben encontrarse en el almacenamiento de Google Drive, en la ruta '/content/drive/MyDrive/data/'. No podemos compartir estas conjuntos de datos debido a la privacidad de los mismos, pero para ejecutar los experimentos, deberíamos contar con los conjuntos de datos que se especifican con la siguiente estructura de directorios:
+
+- /content/drive/MyDrive/data/
+ - ad-preprocessed/
+  - NOR/
+   - PET/
+   - MRI/
+    - grey/
+  - AD/
+   - PET/
+   - MRI/
+    - grey/
+  - MCI/
+   - ...
+    
+
