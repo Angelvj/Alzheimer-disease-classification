@@ -62,10 +62,10 @@ Este paso puede tardar un tiempo considerable, ya que tendremos que descargar lo
 
 ### Paso 3: preentrenar ResNet-18 con datos de COVID19
 
-Para ello, ejecutar la libreta de nombre **pretrain_resnet.ipynb** (preferiblemente en Kaggle y haciendo uso de TPU). Su ejecución dará como resultado un modelo de ResNet-18 entrenada con datos de COVID-19. A continuación, debemos guardar este modelo (archivo pretrained_3D_resnet18.h5) en nuestro Drive, en la ruta /content/drive/MyDrive/pretrained_models/
+Para ello, ejecutar la libreta de nombre **pretrain_resnet.ipynb** (preferiblemente en Kaggle y haciendo uso de TPU). Su ejecución dará como resultado un modelo de ResNet-18 entrenada con datos de COVID-19. A continuación, sería adecuado guardar este modelo (archivo pretrained_3D_resnet18.h5) en nuestro Drive, en la ruta /content/drive/MyDrive/pretrained_models/, por si quisiéramos utilizar la red preentrenada desde Google Colab.
 
 ### Paso 3: ejecutar los experimentos
 
 Habiendo realizado los dos pasos anteriores, ya podemos ejecutar cualquiera de las libretas que ejecutan los experimentos: **experiments1_4.ipynb** o **experiment5.ipynb**.
 
-**Importante**: los experimentos pueden ejecutarse de forma directa tanto en Colab como en Kaggle, salvo los experimentos 4 y 5, para cuya ejecución, habrá que subir el modelo preentrenado de ResNet-18 al almacenamiento de Kaggle (antes de ejecutar).
+**Importante**: los experimentos pueden ejecutarse de forma directa tanto en Colab como en Kaggle, salvo los experimentos 4 y 5, para cuya ejecución, habrá que subir el modelo preentrenado de ResNet-18 al almacenamiento de Kaggle (antes de ejecutar). Para subir el modelo al almacenamiento, la forma más sencilla es hacerlo a partir de la salida obtenida en el paso 3 (suponiendo que se haya realizado el preentrenamiento con Kaggle).
