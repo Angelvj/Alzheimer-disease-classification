@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Sep  3 09:16:12 2021
-
 @author: angel
 """
 
