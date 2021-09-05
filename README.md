@@ -24,7 +24,7 @@ Dentro del directorio *code* tenemos:
 
 ### Paso 1: Transformar las imágenes en archivos TFRecord
 
-Los conjuntos de datos de imágenes deben encontrarse en el almacenamiento de Google Drive, en la ruta '/content/drive/MyDrive/data/'. No podemos compartir estas conjuntos debido a la privacidad de los mismos, pero para ejecutar los experimentos, deberíamos contar con los conjuntos de datos que se especifican con la siguiente estructura de directorios:
+Los conjuntos de datos de imágenes deben encontrarse en el almacenamiento de Google Drive, en la ruta '/content/drive/MyDrive/data/'. No podemos compartir estos conjuntos debido a la privacidad de los mismos, pero para ejecutar los experimentos, deberíamos contar con los conjuntos de datos que se especifican mediante la siguiente estructura de directorios:
 
 - /content/drive/MyDrive/data/
   - ad-preprocessed/ --> imágenes preprocesadas según se explica en la memoria
@@ -45,15 +45,15 @@ Los conjuntos de datos de imágenes deben encontrarse en el almacenamiento de Go
     - ...
 
   - COVID19/ --> Es posible descargar el conjunto en https://mosmed.ai/datasets/covid19_1110/
-    - CT0
+    - CT0/
     - ...
-    - CT4
+    - CT4/
 
 Una vez tenemos los conjuntos de datos, es posible ejecutar la libreta **generate_tfrecords.ipynb**, que realizará la conversión de los conjuntos de datos a nuevos conjuntos de datos en formato TFRecord. Esta libreta en concreto, deberá ejecutarse en Google Colaboratory para hacer uso del almacenamiento de Google Drive.
 
 ### Paso 2 (opcional): subir conjuntos de datos a Kaggle
 
-Para poder ejecutar los experimentos en Kaggle (y aprovechar la velocidad extra que nos aportan las TPU), simplemente, tendremos que crear en Kaggle un conjunto de datos por cada uno de los conjuntos de datos que se han creado al ejecutar la libreta del paso anterior.
+Para poder ejecutar los experimentos en Kaggle (y aprovechar la velocidad extra que nos aportan las TPU), simplemente, tendremos que crear en Kaggle un conjunto de datos por cada uno de los conjuntos de datos que se han creado al ejecutar la libreta del paso anterior (dándoles el mismo nombre).
 
 Este paso puede tardar un tiempo considerable, ya que tendremos que descargar los conjuntos de datos desde Drive y subirlos a Kaggle.
 
