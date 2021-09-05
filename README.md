@@ -2,6 +2,8 @@
 
 Trabajo de fin de grado "Aplicación de redes neuronales convolucionales profundas al diagnóstico asistido de la enfermedad de Alzheimer".
 
+## Directorios
+
 La estructura de directorios es la siguiente:
 - code: código realizado para llevar a cabo todos los experimentos
 - memoria: dentro se encuentra el pdf con la memoria del trabajo
@@ -15,3 +17,5 @@ Dentro del directorio *code* tenemos:
 - experiment5: libreta jupyter para ejecutar el experimento 5
 - generate_tfrecords: libreta para convertir los conjuntos de datos de imágenes en archivos de tipo tfrecord
 - pretrain_resnet: libreta para preentrenar una red ResNet18 con datos de COVID19
+
+## Cómo ejecutar
