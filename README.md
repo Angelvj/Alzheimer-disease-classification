@@ -68,4 +68,4 @@ Para ello, ejecutar la libreta de nombre **pretrain_resnet.ipynb** (preferibleme
 
 Habiendo realizado los dos pasos anteriores, ya podemos ejecutar cualquiera de las libretas que ejecutan los experimentos: **experiments1_4.ipynb** o **experiment5.ipynb**.
 
-**Importante**: salvo el experimento 4, que sólo es compatible con Google Colaboratory, todos pueden ser ejecutados tanto en Colab como en Kaggle. Para evitar problemas de memoria, y conseguir un entrenamiento más rápido, recomendamos usar Kaggle haciendo uso de acelerador TPU siempre que sea posible.
+**Importante**: los experimentos pueden ejecutarse de forma directa tanto en Colab como en Kaggle, salvo los experimentos 4 y 5, para cuya ejecución, habrá que subir el modelo preentrenado de ResNet-18 al almacenamiento de Kaggle (antes de ejecutar).
