@@ -54,8 +54,9 @@ def plot_epochs_history(num_epochs, history):
     plt.show()  
     
 
-def kfold(model_builder, filenames, labels, img_shape, strategy, tpu, autotune, n_folds, batch_size, epochs, stratify=True,
-          shuffle=True, random_state=None, cbks=None):
+def kfold(model_builder, filenames, labels, img_shape, strategy, tpu, autotune, 
+          n_folds, batch_size, epochs, stratify=True, shuffle=True, 
+          random_state=None, cbks=None, augment=None):
     
     # np_rs = np.random.RandomState(np.random.MT19937(np.random.SeedSequence(random_state)))
     folds_histories = []
@@ -87,14 +88,14 @@ def kfold(model_builder, filenames, labels, img_shape, strategy, tpu, autotune, 
             print(f'Training for fold {fold + 1} of {n_folds}...')
 
             history = model.fit(
-                get_dataset(X_train, img_shape, 3, autotune, batch_size=batch_size, train=True, augment=None, cache=True), 
+                get_dataset(X_train, img_shape, 3, autotune, batch_size=batch_size, train=True, augment=augment, cache=True), 
                 epochs = epochs, callbacks = cbks,
                 steps_per_epoch = max(1, int(np.rint(count_data_items(X_train)/batch_size))),
-                validation_data = get_dataset(X_val, img_shape, 3, autotune, batch_size = batch_size, train=False), 
+                validation_data = get_dataset(X_val, img_shape, 3, autotune, batch_size = batch_size, train=False, augment=augment), 
                 validation_steps= max(1, int(np.rint(count_data_items(X_val)/batch_size))))
         
             if tf.__version__ == "2.4.1": # TODO: delete when tensorflow fixes the bug
-                scores = model.evaluate(get_dataset(X_train, img_shape, 3, autotune, batch_size = batch_size, train=False, augment=None, cache=True), 
+                scores = model.evaluate(get_dataset(X_train, img_shape, 3, autotune, batch_size = batch_size, train=False, augment=augment, cache=True), 
                                         batch_size = batch_size, steps = max(1, int(np.rint(count_data_items(X_train)/batch_size))))
                 for i in range(len(model.metrics_names)):
                     history.history[model.metrics_names[i]][-1] = scores[i]
@@ -129,7 +130,7 @@ def kfold(model_builder, filenames, labels, img_shape, strategy, tpu, autotune, 
 
 
 def train_model(model_builder, filenames, img_shape, strategy, autotune, batch_size,
-                epochs, cbks=None):
+                epochs, cbks=None, augment=None):
     
     with strategy.scope():
         OPT = tf.keras.optimizers.Adam()
@@ -138,7 +139,7 @@ def train_model(model_builder, filenames, img_shape, strategy, autotune, batch_s
         model.compile(optimizer=OPT, loss=LOSS, metrics=['accuracy'])
         
     _ = model.fit(
-        get_dataset(filenames, img_shape, autotune, batch_size, train=True, augment=None, cache=True),
+        get_dataset(filenames, img_shape, autotune, batch_size, train=True, augment=augment, cache=True),
         epochs = epochs, callbacks = cbks,
         steps_per_epoch = int(np.rint(count_data_items(filenames)/batch_size)))
 
@@ -203,7 +204,7 @@ def get_predictions(model, X, img_shape, num_classes, autotune, batch_size):
 
 
 def repeated_kfold(model_builder, filenames, labels, img_shape, strategy, tpu, autotune, n_folds, batch_size, epochs, reps=5, 
-                   stratify=True, shuffle=True, random_state=None, cbks=None):
+                   stratify=True, shuffle=True, random_state=None, cbks=None, augment=None):
     
     reps_histories = []
     
@@ -211,7 +212,8 @@ def repeated_kfold(model_builder, filenames, labels, img_shape, strategy, tpu, a
         print(f'Repetition {i + 1}')
         folds_histories = kfold(model_builder, filenames, labels, img_shape, strategy, tpu, autotune, n_folds,
                                              batch_size, epochs, stratify=stratify,
-                                             shuffle=shuffle, random_state=random_state, cbks=cbks)
+                                             shuffle=shuffle, random_state=random_state, 
+                                             cbks=cbks, augment=augment)
 
         reps_histories.append(folds_histories)
 
